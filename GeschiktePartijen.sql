@@ -1,3 +1,5 @@
+DECLARE @DaysBack INT = -1;
+
 SELECT 
 	Sub.*
 FROM
@@ -24,7 +26,7 @@ FROM
 					partition BY LogisticUnitID 
 					ORDER BY HIS_TIMESTAMP DESC ) AS seqnum 
 				 FROM Hist.dbo_LogisticUnitMovements LUM
-				 WHERE CAST(HIS_TIMESTAMP AS DATE) = CAST(GETUTCDATE() AS DATE)) HLM 
+				 WHERE HIS_TIMESTAMP > DATEADD(DAY, @DaysBack, GETUTCDATE())) HLM 
 			 ON LU.LogisticUnitID = HLM.LogisticUnitID
 				AND seqnum = 1 
 
@@ -41,3 +43,5 @@ INNER JOIN (SELECT LotID, MAX(Quantity) Quantity
 			ON LUU.LogisticUnitID = LUE.LogisticUnitID
 			GROUP BY LUE.LotID
 			) LUAGG ON Sub.Aantal = LUAGG.Quantity AND Sub.LotID = LUAGG.LotID
+
+WHERE ISNUMERIC(PAD) = 1
