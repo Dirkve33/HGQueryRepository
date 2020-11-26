@@ -23,7 +23,7 @@ FROM
 	INNER JOIN (SELECT LUM.*,
 				ROW_NUMBER() 
 				  OVER ( 
-					partition BY LogisticUnitID 
+					PARTITION BY LogisticUnitID 
 					ORDER BY HIS_TIMESTAMP DESC ) AS seqnum 
 				 FROM Hist.dbo_LogisticUnitMovements LUM
 				 WHERE HIS_TIMESTAMP > DATEADD(DAY, @DaysBack, GETUTCDATE())) HLM 
